@@ -5,7 +5,7 @@ public class Trader implements Seller {
         int cost;
         String result = "";
         switch (goods) {
-            case ZELIE:
+            case ZELIE://улучшает здоровье
                 cost = 10;
                 if (payCatch(cost, quantity, gold)) {
                     gold = -cost * quantity;
@@ -16,7 +16,7 @@ public class Trader implements Seller {
                     result = "";
                 }
                 return result;
-            case MECH:
+            case MECH://улучшает силу удара
                 cost = 10;
                 if (payCatch(cost, quantity, gold)) {
                     gold = -cost * quantity;

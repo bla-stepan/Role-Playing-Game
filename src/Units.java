@@ -1,4 +1,4 @@
-public abstract class Units implements Fighter {
+public abstract class Units implements Fighter, Seller {
     private String name;//имя персонажа
     private int health, dexterity, experience, power, gold, level;//здоровье, ловкость, опыт, сила, золото
 
@@ -17,7 +17,7 @@ public abstract class Units implements Fighter {
     @Override
     public int attack() {
         //условие силы
-        if (dexterity * 3 > (int) Math.random() * 100) {
+        if (dexterity * 2 > (int) Math.random() * 10) {
             if (Math.random() > 0.8) return power * 2;
             else return power;
         } else return 0;
@@ -91,4 +91,8 @@ public abstract class Units implements Fighter {
         return String.format("%s здоровье:%d", name, health);
     }
 
+    @Override
+    public String sell(Trader.Goods goods, int quantity, int gold) {
+        return null;
+    }
 }

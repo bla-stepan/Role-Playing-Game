@@ -1,6 +1,6 @@
 public class Battle {
     //Метод, который вызывается при начале боя, сюда мы передаем ссылки на нашего героя и монстра, который встал у него на пути
-    public void fight(Units player, Units monster, Realm.FightCallback fightCallback) {//надо добавить еще какой-то объект
+    public void fight(Units player, Units monster, Main.Callback fightCallback) {//надо добавить еще какой-то объект
         //ходы будут идти в отдельном потоке (с помощью интерфейчас runnadle)
         Runnable runnable = () -> {
             int turn = 1;//номер хода
@@ -17,7 +17,7 @@ public class Battle {
 
                 //чтобы бой не проходил за секунду, немного поспим
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -29,33 +29,33 @@ public class Battle {
     }
 
     //метод для совершения удара
-    private boolean makeHit(Units defender, Units attacker, Realm.FightCallback fightCallback){
+    private boolean makeHit(Units defender, Units attacker, Main.Callback fightCallback) {
         //получаем силу удара
         int hit = attacker.attack();
         //получаем здоровье обороняющегося
-        int defenderHealth = defender.getHealth();
-        if(hit!=0){
+        int defenderHealth = defender.getHealth()-hit;
+        if (hit != 0) {
             //пишем ход атакующего
             System.out.println(String.format("%s нанес удар в %d единиц.", attacker.getName(), hit));
             //пишем ход обороняющегося
             System.out.println(String.format("У %s осталось %d единиц здоровья.", defender.getName(), defenderHealth));
-        }else {
+        } else {
             System.out.println(String.format("%s промахнулся!", attacker.getName()));
         }
         //проверяем
-        if(defenderHealth<=0 && defender instanceof Player){
+        if (defenderHealth <= 0 && defender instanceof Player) {
             System.out.println(String.format("Богатырь %s пал в бою!", defender.getName()));
             //тут надо дописать метод колбэк
-            fightCallback.fightLost();
+            fightCallback.Lost();
             return true;
-        }else if (defenderHealth<=0){
-            String.format("%s был повержен! %s получает %d опыта и %d золота!", defender.getName(), defender.getExperience(), defender.getGold());
-            attacker.setExperience(attacker.getExperience()+defender.getExperience());
-            attacker.setGold(attacker.getGold()+defender.getGold());
+        } else if (defenderHealth <= 0) {
+            String.format("%s был повержен! %s получает %d опыта и %d золота!", defender.getName(), attacker.getName(), defender.getExperience(), defender.getGold());
+            attacker.setExperience(attacker.getExperience() + defender.getExperience());
+            attacker.setGold(attacker.getGold() + defender.getGold());
             //тут пишем метод колбэк
-            fightCallback.fightWin();
+            fightCallback.Win();
             return true;
-        }else {
+        } else {
             //если защищающийся не повержен, то мы устанавливаем ему новый уровень здоровья
             defender.setHealth(defenderHealth);
             return false;
