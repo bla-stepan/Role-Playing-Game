@@ -3,7 +3,6 @@ public class Trader implements Seller{
     public void sell(String goods, Units player) {
         int gold = player.getGold();
         int cost;
-        //String result = "";
         switch (goods) {
             case "зелье"://улучшает здоровье
                 cost = 10;
@@ -21,7 +20,6 @@ public class Trader implements Seller{
                     player.setGold(player.getGold() - cost);
                     player.setDexterity(player.getDexterity() + 15);
                     System.out.println(String.format("продано %s богатырь прокачен (ЛОВКОСТЬ: %d, остаток золота: %d)", goods, player.getDexterity(), player.getGold()));
-                    //result = "M";
                 } else {
                     System.out.println(String.format("недостаточно средств для покупки %s", goods));
                 }
@@ -41,7 +39,7 @@ public class Trader implements Seller{
 
         }
     }
-
+    //проверяем нашичку
     public boolean payCatch(int cost, int pay) {
         if (cost <= pay) return true;
         else return false;

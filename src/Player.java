@@ -6,8 +6,4 @@ public class Player extends Units{
                 "Богатырь по имени %s с параметрами (здоровье: %d, ловкость: %d, опыт: %d, сила: %d, наличка: %d) к бою готов!",
                  name, health, dexterity, experience, power, gold));
     }
-
-    public void playerUpgrade(String goods){
-
-    }
 }

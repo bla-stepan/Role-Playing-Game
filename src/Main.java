@@ -52,7 +52,6 @@ public class Main {//Realm
                     command("2");
                 }
             }
-            //printMenu();//command(br.readLine());
             break;
             case "2": {
                 commitFight();//ошибка
@@ -80,7 +79,6 @@ public class Main {//Realm
         void Lost();
 
         void Win();
-
     }
 
     private static void trading(String goodsAdd) {
