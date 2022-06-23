@@ -1,4 +1,4 @@
-public abstract class Units implements Fighter, Seller {
+public abstract class Units implements Fighter {
     private String name;//имя персонажа
     private int health, dexterity, experience, power, gold, level;//здоровье, ловкость, опыт, сила, золото
 
@@ -17,16 +17,18 @@ public abstract class Units implements Fighter, Seller {
     @Override
     public int attack() {
         //условие силы
-        if (dexterity * 2 > (int) Math.random() * 10) {
-            if (Math.random() > 0.8) return power * 2;
-            else return power;
+        if (dexterity * (3+level) > getRandomValue()) {
+            if (Math.random()*10 % 2 == 0) {
+                return power * 2;
+            } else return power;
+        //}else return power;
         } else return 0;
     }
 
     //метод случайного числа
-//    private  int getRandomValue(){
-//        return (int) Math.random()*100;
-//    }
+    private  int getRandomValue(){
+        return (int) (Math.random() * 100);
+    }
 
     //геттеры и сеттеры
     public String getName() {
@@ -81,18 +83,14 @@ public abstract class Units implements Fighter, Seller {
         return level;
     }
 
-    public void setLevel(int level) {
+    public Units setLevel(int level) {
         this.level = level;
+        return this;
     }
 
     //переопределяем метод печати имени и здоровья юнита
     @Override
     public String toString() {
         return String.format("%s здоровье:%d", name, health);
-    }
-
-    @Override
-    public String sell(Trader.Goods goods, int quantity, int gold) {
-        return null;
     }
 }

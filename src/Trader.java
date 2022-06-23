@@ -1,61 +1,49 @@
-public class Trader implements Seller {
+public class Trader implements Seller{
 
-    @Override
-    public String sell(Goods goods, int quantity, int gold) {
+    public void sell(String goods, Units player) {
+        int gold = player.getGold();
         int cost;
-        String result = "";
+        //String result = "";
         switch (goods) {
-            case ZELIE://улучшает здоровье
+            case "зелье"://улучшает здоровье
                 cost = 10;
-                if (payCatch(cost, quantity, gold)) {
-                    gold = -cost * quantity;
-                    System.out.println(String.format("продано %d единиц %s остаток золота - %d", quantity, goods, gold));
-                    result = "Z";
+                if (payCatch(cost, gold)) {
+                    player.setGold(player.getGold() - cost);
+                    player.setHealth(player.getHealth() + 100);
+                    System.out.println(String.format("продано %s богатырь прокачен (ЗДОРОВЬЕ: %d, остаток золота: %d)", goods, player.getHealth(), player.getGold()));
                 } else {
-                    System.out.println(String.format("недостаточно средств для покупки %d единиц %s", quantity, goods));
-                    result = "";
+                    System.out.println(String.format("недостаточно средств для покупки %s", goods));
                 }
-                return result;
-            case MECH://улучшает силу удара
-                cost = 10;
-                if (payCatch(cost, quantity, gold)) {
-                    gold = -cost * quantity;
-                    System.out.println(String.format("продано %d единиц %s остаток золота - %d", quantity, goods, gold));
-                    result = "M";
+                break;
+            case "меч"://улучшает силу удара
+                cost = 20;
+                if (payCatch(cost, gold)) {
+                    player.setGold(player.getGold() - cost);
+                    player.setDexterity(player.getDexterity() + 15);
+                    System.out.println(String.format("продано %s богатырь прокачен (ЛОВКОСТЬ: %d, остаток золота: %d)", goods, player.getDexterity(), player.getGold()));
+                    //result = "M";
                 } else {
-                    System.out.println(String.format("недостаточно средств для покупки %d единиц %s", quantity, goods));
-                    result = "";
+                    System.out.println(String.format("недостаточно средств для покупки %s", goods));
                 }
-                return result;
-            case SHLEM:
-                cost = 10;
-                if (payCatch(cost, quantity, gold)) {
-                    gold = -cost * quantity;
-                    System.out.println(String.format("продано %d единиц %s остаток золота - %d", quantity, goods, gold));
-                    result = "S";
+                break;
+            case "щит":
+                cost = 30;
+                if (payCatch(cost, gold)) {
+                    player.setGold(player.getGold() - cost);
+                    player.setExperience(player.getExperience() + 25);
+                    System.out.println(String.format("продано %s богатырь прокачен (ОПЫТ: %d, остаток золота: %d)", goods, player.getExperience(), player.getGold()));
                 } else {
-                    System.out.println(String.format("недостаточно средств для покупки %d единиц %s", quantity, goods));
-                    result = "";
+                    System.out.println(String.format("недостаточно средств для покупки %s", goods));
                 }
-                return result;
+                break;
             default:
-                System.out.println("Такого товара нет в наличии");
-        }
-        return result;
-    }
+                System.out.println("К сожалению у нат нет какого товара.");
 
-    public boolean payCatch(int cost, int pay, int quantity) {
-        if (quantity > 0) {
-            if (cost * quantity <= pay) return true;
-            else return false;
-        } else {
-            System.out.println(String.format("Указано не верное количество %d", quantity));
-            return false;
         }
     }
 
-
-    public enum Goods {
-        ZELIE, MECH, SHLEM
+    public boolean payCatch(int cost, int pay) {
+        if (cost <= pay) return true;
+        else return false;
     }
 }

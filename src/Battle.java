@@ -7,7 +7,7 @@ public class Battle {
             boolean isFightEnded = false;//проверка на окончание боя
             while (!isFightEnded) {
                 //печатаем номер ходы
-                System.out.println("=====ход -" + turn + "=====");
+                System.out.println("===== ход - " + turn + " =====");
                 //логика смены нападающей стороны
                 if (turn++ % 2 != 0) {
                     isFightEnded = makeHit(player, monster, fightCallback);
@@ -17,7 +17,7 @@ public class Battle {
 
                 //чтобы бой не проходил за секунду, немного поспим
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -49,9 +49,12 @@ public class Battle {
             fightCallback.Lost();
             return true;
         } else if (defenderHealth <= 0) {
-            String.format("%s был повержен! %s получает %d опыта и %d золота!", defender.getName(), attacker.getName(), defender.getExperience(), defender.getGold());
+            System.out.println(String.format("%s был повержен! %s получает %d опыта и %d золота!", defender.getName(), attacker.getName(), defender.getExperience(), defender.getGold()));
             attacker.setExperience(attacker.getExperience() + defender.getExperience());
             attacker.setGold(attacker.getGold() + defender.getGold());
+            //увеличиваем уровень при посте опыта
+            attacker.setLevel(Math.round(attacker.getExperience()/100));
+
             //тут пишем метод колбэк
             fightCallback.Win();
             return true;

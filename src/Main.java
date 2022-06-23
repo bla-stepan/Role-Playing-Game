@@ -5,7 +5,8 @@ import java.io.InputStreamReader;
 public class Main {//Realm
     private static BufferedReader br;
     private static Units player = null;
-    private static Battle battle=null;
+    private static Battle battle = null;
+    private static Trader trader = new Trader();
 
     public static void main(String[] args) {
         //инициируем чтение BufferedReader
@@ -15,7 +16,7 @@ public class Main {//Realm
         //просим ввести имя игрока
         System.out.println("Введите имя игрока:");
         try {
-            command(br.readLine());//обвернуть в метод комманд ошибка
+            command(br.readLine());//запускаем создание игрока и меню
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -26,18 +27,32 @@ public class Main {//Realm
     private static void command(String str) throws IOException {
         //Если это первый запуск, то мы должны создать игрока, именем будет служить первая введенная строка из консоли
         if (player == null) {
-            player = new Player(str, 100, 10, 0, 10, 0, 1);
+            player = new Player(str, 100, 20, 20, 13, 50, 0);
             String.format("Спасти наш мир от драконов и леших вызвался богатырь %s!", player.getName());
-            //отдельным методом выводим меню
-            printMenu();
+
         }
+        //отдельным методом выводим меню
+        printMenu();
         //варианты команд
         switch (br.readLine()) {
+            //Торговец
             case "1": {
-                System.out.println("торговец еще не приехал");
-                //player.sell();
-                command(br.readLine());
+                System.out.println("что изволите купить? (зелье/меч/щит)");
+                //Метод покупок
+                trading(br.readLine());
+                //диалог с продавцом
+                System.out.println("Может что-то еще хотите приобрести? (да/нет)");
+                if (br.readLine().equals("да")) {
+                    System.out.println("Выбирайте! (зелье/меч/щит)");
+                    trading(br.readLine());
+                    System.out.println("Спасибо что зашли! Удачи вам в бою!");
+                    command("2");
+                } else {
+                    System.out.println("Как вам угодно! заходите еще!");
+                    command("2");
+                }
             }
+            //printMenu();//command(br.readLine());
             break;
             case "2": {
                 commitFight();//ошибка
@@ -56,6 +71,7 @@ public class Main {//Realm
                 command(br.readLine());
             }
         }
+
         //снова ждем команды от пользователя
         command(br.readLine());
     }
@@ -64,12 +80,17 @@ public class Main {//Realm
         void Lost();
 
         void Win();
+
+    }
+
+    private static void trading(String goodsAdd) {
+        //Trader trader = new Trader(); чтобы каждый раз нового торговца не создавать
+        trader.sell(goodsAdd, player);
     }
 
     //метод реализации боевой логики
     private static void commitFight() {
         //запускаем объект и вызываем метод битвы
-        //Units monster = creatMonster();
         battle.fight(player, creatMonster(), new Callback() {
             @Override
             public void Lost() {
@@ -94,8 +115,8 @@ public class Main {//Realm
 
     private static Units creatMonster() {
         //рандомим появление монстра
-        if (Math.random() * 10 % 2 == 0) return new Goblin("Чудо Юдо поганое", 100, 5, 1, 10, 50, 1);
-        else return new Dragon("Змей Горыныч", 100, 10, 1, 15, 100, 1);
+        if ((Math.random() * 10) % 2 == 0) return new Goblin("ЧудоЮдо поганое", 100, 5, 10, 10, 50, 0);
+        else return new Dragon("Змей Горыныч", 100, 10, 10, 15, 100, 0);
 
     }
 
@@ -106,6 +127,4 @@ public class Main {//Realm
         System.out.println("2. В темный лес.");
         System.out.println("3. Да ну Вас! Пойду на печи полежу.");
     }
-
-
 }
